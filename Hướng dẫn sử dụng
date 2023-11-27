@@ -1,0 +1,49 @@
+Để sử dụng Apps Script :
+
+Nhận API Key: API key là yêu cầu để truy cập vào OpenAI API. Để có được nó, bạn cần đăng ký trên nền tảng OpenAI và tạo một API key. Bạn có thể làm điều này bằng cách truy cập trang web của OpenAI, điều hướng đến cài đặt tài khoản hoặc bảng điều khiển của bạn, và tạo một API key cho dịch vụ Text-to-Speech (TTS).
+
+Google Sheet ID: Đây là ID duy nhất của Bảng tính Google của bạn. Để tìm nó:
+
+Mở Bảng tính Google mà bạn muốn sử dụng.
+Nhìn vào URL trong thanh địa chỉ của trình duyệt của bạn. Sheet ID là chuỗi ký tự dài nằm giữa '/d/' và '/edit' trong URL. Sao chép ID này và sử dụng nó trong biến sheetId trong script của bạn.
+Google Drive Folder ID: Đây là định danh của thư mục trong Google Drive của bạn nơi bạn muốn lưu trữ các tệp âm thanh. Để tìm nó:
+
+Mở Google Drive.
+Nhấp chuột phải vào thư mục mong muốn và chọn "Get link" (Nhận liên kết). Liên kết sẽ chứa Folder ID bên trong nó, thường là sau id= và trước bất kỳ ký tự & nào. Sao chép ID này và sử dụng nó trong biến folderId trong script của bạn.
+Sau khi có được các thông tin này:
+
+Mở Bảng tính Google của bạn.
+Điều hướng đến Extensions (Tiện ích) > Apps Script.
+Dán mã script được cung cấp vào trình soạn thảo.
+Thay thế 'API Key', 'Google Sheet ID', và 'Folder ID' trong mã script bằng API key thực, Google Sheet ID và Google Drive folder ID của bạn, tương ứng.
+
+Cách Thêm và Chạy Script Trong Google Sheets
+Mở Google Sheets:
+
+Truy cập vào trang chủ của Google Drive: https://drive.google.com/.
+Tạo hoặc mở bảng tính Google Sheets bạn muốn sử dụng.
+Mở Trình Soạn Thảo Script:
+
+Trong bảng tính Google Sheets, chọn Extensions (Tiện Ích) ở thanh menu trên cùng.
+Chọn Apps Script.
+Dán Mã Script:
+
+Trong trình soạn thảo Apps Script mới mở, dán mã script được cung cấp vào trong khung soạn thảo.
+Thay thế 'API Key', 'Google Sheet ID', và 'Folder ID' trong mã script với các thông tin thực của bạn.
+Lưu và Đóng Trình Soạn Thảo:
+
+Sau khi thay đổi mã script, nhấn File (Tập Tin) và chọn Save (Lưu) để lưu lại các thay đổi.
+Sau khi đã lưu, đóng trình soạn thảo Apps Script.
+Cấp Quyền Truy Cập:
+
+Refresh lại trang bảng tính Google Sheets.
+Đôi khi bạn cần phải cấp quyền cho script để có thể đọc/giữ/lưu trữ dữ liệu. Trong trường hợp được yêu cầu, làm theo hướng dẫn để cấp quyền cho script.
+Chạy Script Từ Google Sheets:
+
+Trong bảng tính, bạn sẽ thấy một menu mới được tạo có tên Create Audio (Tạo Âm Thanh).
+Chọn menu Create Audio, sau đó chọn Generate Speech (Tạo Giọng Nói) để chạy hàm generateSpeech() trong script.
+Lưu Ý Quan Trọng:
+
+Luôn luôn giữ API key và thông tin nhạy cảm riêng tư, không chia sẻ chúng công khai.
+Cẩn thận khi cấp quyền truy cập cho script để tránh việc script truy cập vào dữ liệu cá nhân không cần thiết.
+Bạn cũng cần phải có API Key từ OpenAI, ID của Google Sheet và ID của thư mục trong Google Drive để sử dụng cho script. Đảm bảo rằng bạn đã cấp quyền cho script để truy cập vào dữ liệu và thư mục Drive của bạn.
