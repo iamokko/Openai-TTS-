@@ -1,0 +1,77 @@
+function generateSpeech() {
+  const apiKey = 'API Key'; // Replace with your actual API key
+  const sheetId = 'Google Sheet ID'; // Google Sheet ID
+  const folderId = 'Folder ID'; // Replace with your Google Drive folder ID
+  // Get the Google Sheet by its ID
+  const sheet = SpreadsheetApp.openById(sheetId);
+  const range = sheet.getRange('A:B'); // Assuming column A contains text to convert and column B will contain audio links
+
+  const data = range.getValues();
+
+  // Loop through the first 50 rows of data
+  const maxRowsToProcess = Math.min(data.length, 50); // Considering a maximum of 50 rows or the actual data length, whichever is smaller
+  for (let i = 0; i < maxRowsToProcess; i++) {
+    const textToSpeak = data[i][0].toString().trim(); // Get text from column A
+    const audioLink = data[i][1]; // Get the existing audio link from column B
+
+    if (textToSpeak && !audioLink) { // Proceed only if text exists and column B is empty
+      const textArray = textToSpeak.split(' ');
+      const firstFiveWords = textArray.slice(0, 5).join(' '); // Extract the first five words
+
+      const openaiEndpoint = 'https://api.openai.com/v1/audio/speech';
+
+      const requestData = {
+        model: 'tts-1',
+        voice: 'alloy',
+        input: textToSpeak, // Use the full text as input text
+      };
+
+      const payload = {
+        method: 'POST',
+        contentType: 'application/json',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+        muteHttpExceptions: true,
+        payload: JSON.stringify(requestData),
+      };
+
+      const response = UrlFetchApp.fetch(openaiEndpoint, payload);
+
+      if (response.getResponseCode() === 200) {
+        const audioBlob = response.getBlob();
+
+        const fileName = `${firstFiveWords}.mp3`; // Use first five words as filename
+
+        // Check if audio link exists in column B
+        if (!audioLink) {
+          // Save the audio file to Google Drive if column B is empty
+          const folder = DriveApp.getFolderById(folderId);
+          const audioFile = folder.createFile(audioBlob.setName(fileName));
+          const newAudioLink = audioFile.getUrl();
+
+          // Set the new audio link in the corresponding row in column B as a hyperlink
+          const sheetCell = range.getCell(i + 1, 2); // i+1 because Google Sheets is 1-indexed
+          sheetCell.setFormula(`=HYPERLINK("${newAudioLink}","${fileName}")`);
+
+          Logger.log(`Audio file "${fileName}" created in Google Drive.`);
+          Logger.log(`Audio link "${newAudioLink}" added as a hyperlink to row ${i + 1}, column B.`);
+        } else {
+          Logger.log(`Audio link already exists in row ${i + 1}. Skipping.`);
+        }
+      } else {
+        Logger.log(`Error: ${response.getResponseCode()} - ${response.getContentText()}`);
+      }
+    } else if (!textToSpeak) {
+      Logger.log(`No text provided in row ${i + 1}. Skipping.`);
+    }
+  }
+}
+
+// Function to create custom menu in Google Sheets
+function onOpen() {
+  const ui = SpreadsheetApp.getUi();
+  ui.createMenu('Tạo ÂM Thanh')
+    .addItem('Generate Speech', 'generateSpeech')
+    .addToUi();
+}
